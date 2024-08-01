@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda en Árbol BK</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Búsqueda en Árbol BK</h1>
+    <p>Ingrese un nombre para encontrar nombres similares:</p>
+    <input type="text" id="queryName" placeholder="Ingrese un nombre">
+    <button onclick="buscarNombres()">Buscar</button>
+    <h2>Nombres Similares:</h2>
+    <ul id="results"></ul>
+
+    <script src="bk-tree.js"></script>
+    <script>
+        const nombres = ["Alice", "Bob", "Charlie", "David", "Eve", "Fernanda", "Gabriel", "Hugo", "Iván", "Javier"];
+        const arbolBK = new BKTree(levenshteinDistance);
+        nombres.forEach(nombre => arbolBK.add(nombre));
+
+        function buscarNombres() {
+            const nombreConsulta = document.getElementById('queryName').value;
+            const distanciaMaxima = 2;
+            const nombresSimilares = arbolBK.search(nombreConsulta, distanciaMaxima);
+            const listaResultados = document.getElementById('results');
+            listaResultados.innerHTML = '';
+            nombresSimilares.forEach(nombre => {
+                const elementoLista = document.createElement('li');
+                elementoLista.textContent = nombre;
+                listaResultados.appendChild(elementoLista);
+            });
+        }
+    </script>
+</body>
+</html>

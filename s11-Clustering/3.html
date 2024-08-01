@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agrupamiento de Datos</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Paso 1: Recolección de Datos -->
+    <h2>Recolección de Datos</h2>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Altura (cm)</th>
+            <th>Peso (kg)</th>
+            <th>Deporte Favorito</th>
+        </tr>
+        <tr>
+            <td>Ana</td>
+            <td>25</td>
+            <td>165</td>
+            <td>60</td>
+            <td>Natación</td>
+        </tr>
+        <tr>
+            <td>Carlos</td>
+            <td>30</td>
+            <td>175</td>
+            <td>75</td>
+            <td>Fútbol</td>
+        </tr>
+        <tr>
+            <td>Lucía</td>
+            <td>22</td>
+            <td>160</td>
+            <td>55</td>
+            <td>Yoga</td>
+        </tr>
+        <tr>
+            <td>Pedro</td>
+            <td>28</td>
+            <td>180</td>
+            <td>80</td>
+            <td>Baloncesto</td>
+        </tr>
+        <tr>
+            <td>María</td>
+            <td>26</td>
+            <td>170</td>
+            <td>65</td>
+            <td>Ciclismo</td>
+        </tr>
+    </table>
+
+    <!-- Paso 2: Elección de Características -->
+    <h2>Elección de Características</h2>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Altura (cm)</th>
+            <th>Peso (kg)</th>
+        </tr>
+        <tr>
+            <td>Ana</td>
+            <td>25</td>
+            <td>165</td>
+            <td>60</td>
+        </tr>
+        <tr>
+            <td>Carlos</td>
+            <td>30</td>
+            <td>175</td>
+            <td>75</td>
+        </tr>
+        <tr>
+            <td>Lucía</td>
+            <td>22</td>
+            <td>160</td>
+            <td>55</td>
+        </tr>
+        <tr>
+            <td>Pedro</td>
+            <td>28</td>
+            <td>180</td>
+            <td>80</td>
+        </tr>
+        <tr>
+            <td>María</td>
+            <td>26</td>
+            <td>170</td>
+            <td>65</td>
+        </tr>
+    </table>
+
+    <!-- Paso 4: Agrupamiento -->
+    <h2>Agrupamiento</h2>
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <script>
+        // Datos
+        const data = [
+            { nombre: 'Ana', edad: 25, altura: 165, peso: 60 },
+            { nombre: 'Carlos', edad: 30, altura: 175, peso: 75 },
+            { nombre: 'Lucía', edad: 22, altura: 160, peso: 55 },
+            { nombre: 'Pedro', edad: 28, altura: 180, peso: 80 },
+            { nombre: 'María', edad: 26, altura: 170, peso: 65 }
+        ];
+
+        // Extracción de características (altura y peso)
+        const features = data.map(persona => [persona.altura, persona.peso]);
+
+        // Función para calcular la distancia euclidiana
+        function euclideanDistance(point1, point2) {
+            return Math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2);
+        }
+
+        // Función K-means clustering
+        function kmeans(data, k) {
+            const centroids = data.slice(0, k);
+            let clusters = Array.from({ length: k }, () => []);
+
+            let changed = true;
+            while (changed) {
+                clusters = Array.from({ length: k }, () => []);
+                data.forEach(point => {
+                    let minDistance = Infinity;
+                    let clusterIndex = 0;
+                    centroids.forEach((centroid, index) => {
+                        const distance = euclideanDistance(point, centroid);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            clusterIndex = index;
+                        }
+                    });
+                    clusters[clusterIndex].push(point);
+                });
+
+                changed = false;
+                centroids.forEach((centroid, index) => {
+                    const cluster = clusters[index];
+                    const newCentroid = cluster.reduce((mean, point) => {
+                        mean[0] += point[0];
+                        mean[1] += point[1];
+                        return mean;
+                    }, [0, 0]).map(value => value / cluster.length);
+
+                    if (euclideanDistance(centroid, newCentroid) > 0.001) {
+                        changed = true;
+                        centroids[index] = newCentroid;
+                    }
+                });
+            }
+            return clusters;
+        }
+
+        // Aplicar K-means clustering con k = 2
+        const clusters = kmeans(features, 2);
+
+        // Preparar datos para el gráfico
+        const dataCluster1 = clusters[0].map(point => ({ x: point[0], y: point[1] }));
+        const dataCluster2 = clusters[1].map(point => ({ x: point[0], y: point[1] }));
+
+        // Crear gráfico
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Grupo 1',
+                        data: dataCluster1,
+                        backgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Grupo 2',
+                        data: dataCluster2,
+                        backgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: {
+                            display: true,
+                            text: 'Altura (cm)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Peso (kg)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

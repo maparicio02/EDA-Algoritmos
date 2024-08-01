@@ -1,0 +1,36 @@
+// Lista de restaurantes con sus coordenadas
+const restaurants = [
+    { name: "La Casona", lat: -15.8390, lng: -70.0195 },
+    { name: "Mojsa Restaurant", lat: -15.8415, lng: -70.0220 },
+    { name: "La Table del' Inca", lat: -15.8420, lng: -70.0200 },
+    { name: "Pacha Mixology", lat: -15.8400, lng: -70.0230 },
+    { name: "La Choza de Oscar", lat: -15.8450, lng: -70.0250 },
+    { name: "Mercado Central", lat: -15.8385, lng: -70.0210 },
+    { name: "Balcones de Puno", lat: -15.8405, lng: -70.0245 },
+    { name: "Cevichería Camila", lat: -15.8425, lng: -70.0190 },
+    { name: "Pizzeria del Buho", lat: -15.8395, lng: -70.0225 },
+    { name: "Inka Rumi", lat: -15.8415, lng: -70.0205 },
+    { name: "Ekeko's", lat: -15.8430, lng: -70.0215 },
+    { name: "Café Bar de la Casa del Corregidor", lat: -15.8370, lng: -70.0230 },
+    { name: "La Estancia", lat: -15.8440, lng: -70.0195 },
+    { name: "Ricos Pan", lat: -15.8455, lng: -70.0220 },
+    { name: "El Rancho Pollo", lat: -15.8460, lng: -70.0200 },
+    { name: "La Hostería", lat: -15.8402, lng: -70.0180 },
+    { name: "Kusikuy", lat: -15.8380, lng: -70.0198 },
+    { name: "El Tablón", lat: -15.8398, lng: -70.0175 },
+    { name: "El Fogón", lat: -15.8423, lng: -70.0238 },
+    { name: "Loving Hut", lat: -15.8375, lng: -70.0215 },
+    { name: "Ruphay", lat: -15.8418, lng: -70.0240 },
+    { name: "La Casa de la Abuela", lat: -15.8438, lng: -70.0255 },
+    { name: "Restaurant Giorgio", lat: -15.8450, lng: -70.0210 },
+    { name: "El Apóstol Santiago", lat: -15.8465, lng: -70.0225 },
+    { name: "El Gran Paititi", lat: -15.8470, lng: -70.0190 },
+    { name: "Café Bar Berlin", lat: -15.8480, lng: -70.0205 },
+    { name: "Restaurant El Candelabro", lat: -15.8490, lng: -70.0215 },
+    { name: "La Choza", lat: -15.8500, lng: -70.0220 },
+    { name: "Las Velas", lat: -15.8510, lng: -70.0235 },
+    { name: "Restaurant Mirador", lat: -15.8520, lng: -70.0245 },
+];
+
+// Asignar los restaurantes al grid
+assignRestaurantsToGrid(restaurants);

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Means Clustering con Ciudades</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+        // Datos ficticios de ciudades
+        const cities = [
+            { name: 'Ciudad A', lat: 40.7128, lon: -74.0060 },
+            { name: 'Ciudad B', lat: 34.0522, lon: -118.2437 },
+            { name: 'Ciudad C', lat: 41.8781, lon: -87.6298 },
+            { name: 'Ciudad D', lat: 29.7604, lon: -95.3698 },
+            { name: 'Ciudad E', lat: 39.7392, lon: -104.9903 },
+            { name: 'Ciudad F', lat: 32.7767, lon: -96.7970 },
+            { name: 'Ciudad G', lat: 37.7749, lon: -122.4194 },
+            { name: 'Ciudad H', lat: 47.6062, lon: -122.3321 },
+            { name: 'Ciudad I', lat: 33.4484, lon: -112.0740 },
+            { name: 'Ciudad J', lat: 25.7617, lon: -80.1918 }
+        ];
+
+        // Convertir coordenadas de lat/lon a una escala de 0 a canvas width/height
+        function convertCoordinates(city, canvasWidth, canvasHeight) {
+            return {
+                x: (city.lon + 180) * (canvasWidth / 360),
+                y: (90 - city.lat) * (canvasHeight / 180)
+            };
+        }
+
+        // Calcular la distancia entre dos puntos
+        function calculateDistance(point1, point2) {
+            return Math.sqrt((point1.x - point2.x) ** 2 + (point1.y - point2.y) ** 2);
+        }
+
+        // Asignar puntos al cluster más cercano
+        function assignPointsToClusters(points, centroids) {
+            points.forEach(point => {
+                let minDistance = Infinity;
+                let closestCentroid = null;
+
+                centroids.forEach((centroid, index) => {
+                    const distance = calculateDistance(point, centroid);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestCentroid = index;
+                    }
+                });
+
+                point.cluster = closestCentroid;
+            });
+        }
+
+        // Recalcular la posición de los centroides
+        function recalculateCentroids(points, centroids) {
+            const sums = centroids.map(() => ({ x: 0, y: 0, count: 0 }));
+
+            points.forEach(point => {
+                const centroid = sums[point.cluster];
+                centroid.x += point.x;
+                centroid.y += point.y;
+                centroid.count++;
+            });
+
+            centroids.forEach((centroid, index) => {
+                if (sums[index].count > 0) {
+                    centroid.x = sums[index].x / sums[index].count;
+                    centroid.y = sums[index].y / sums[index].count;
+                }
+            });
+        }
+
+        // Algoritmo de clustering k-means
+        function kMeans(points, k, maxIterations) {
+            // Inicializar centroides
+            const centroids = [];
+            for (let i = 0; i < k; i++) {
+                centroids.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height
+                });
+            }
+
+            // Iterar para refinar clusters
+            for (let i = 0; i < maxIterations; i++) {
+                assignPointsToClusters(points, centroids);
+                recalculateCentroids(points, centroids);
+            }
+
+            return { points, centroids };
+        }
+
+        // Dibujar los resultados
+        function drawClusters(canvas, points, centroids) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const colors = ['red', 'blue', 'green', 'orange', 'purple'];
+
+            points.forEach(point => {
+                ctx.fillStyle = colors[point.cluster];
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(point.name, point.x + 7, point.y - 7);
+            });
+
+            centroids.forEach((centroid, index) => {
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(centroid.x, centroid.y, 10, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // Script principal
+        const canvas = document.getElementById('myCanvas');
+        const points = cities.map(city => {
+            const coords = convertCoordinates(city, canvas.width, canvas.height);
+            return { name: city.name, x: coords.x, y: coords.y, cluster: null };
+        });
+        const k = 3; // Número de clusters
+        const maxIterations = 100;
+
+        const result = kMeans(points, k, maxIterations);
+        drawClusters(canvas, result.points, result.centroids);
+    </script>
+</body>
+</html>

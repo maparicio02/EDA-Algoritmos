@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Imágenes Similares</title>
+    <style>
+        /* Estilos simples para el diseño */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #imageInput {
+            margin-bottom: 10px;
+        }
+        #previewContainer {
+            margin-bottom: 20px;
+        }
+        .image-preview {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 10px;
+        }
+        #searchButton {
+            padding: 10px;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .result {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Búsqueda de Imágenes Similares</h1>
+    <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+    <div id="previewContainer"></div>
+    <button id="searchButton" onclick="searchSimilarImages()">Buscar Imágenes Similares</button>
+    <div id="results"></div>
+
+    <script src="bkTree.js"></script>
+    <script src="imageSearch.js"></script>
+</body>
+</html>

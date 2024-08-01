@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#map {
+    width: 500px;
+    height: 500px;
+    border: 1px solid #000;
+    position: relative;
+}
+
+.restaurant {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    position: absolute;
+    border-radius: 50%;
+}
+
+#location {
+    margin-top: 20px;
+}
