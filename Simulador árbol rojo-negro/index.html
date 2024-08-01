@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Árbol Rojo-Negro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        #controls {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 300px;
+        }
+        #controls input, #controls button {
+            margin: 5px 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #controls input[type="number"] {
+            width: 150px;
+        }
+        #controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #controls button:hover {
+            background-color: #0056b3;
+        }
+        #controls label {
+            font-size: 16px;
+        }
+        #controls button.undo {
+            background-color: palevioletred;
+            color: black;
+            border-color: black;
+            border-radius: 1px;
+        }
+        #treeCanvas {
+            border: 2px solid #007bff;
+            background: beige;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #properties {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: left;
+        }
+        #properties h2 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+        #properties p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <h1>Visualizador de Árbol Rojo-Negro</h1>
+        <div>
+            <input type="number" id="insertValue" placeholder="Valor a insertar">
+            <button onclick="insertNode()"><b>Insertar</b></button>
+        </div>
+        <div>
+            <input type="number" id="deleteValue" placeholder="Valor a eliminar">
+            <button onclick="deleteNode()"><b>Eliminar</b></button>
+        </div>
+        <div>
+            <input type="number" id="findValue" placeholder="Valor a encontrar">
+            <button onclick="findNode()"><b>Encontrar</b></button>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" id="showNulls" onchange="toggleNulls()"> Mostrar hojas nulas
+            </label>
+        </div>
+        <button onclick="undo()" class="undo"><b>Retroceder</b></button>
+    </div>
+    <div id="properties">
+        <h2>Propiedades del Árbol Rojo-Negro</h2>
+        <p>1. Cada nodo es rojo o negro.</p>
+        <p>2. La raíz siempre es de color negro.</p>
+        <p>3. Todos los nodos hojas son negros.</p>
+        <p>4. Los nodos rojos no pueden tener hijos rojos.</p>
+        <p>5. Cada camino desde la raiz a sus nodos descendientes null tiene el mismo número de nodos negros.</p>
+    </div>
+    <canvas id="treeCanvas" width="800" height="600"></canvas>
+    <script src="rbtree.js"></script>
+</body>
+</html>
